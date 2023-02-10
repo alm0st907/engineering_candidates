@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Bargreen.Services;
 using Bargreen.Services.Interfaces;
 using Bargreen.Services.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -52,9 +51,8 @@ namespace Bargreen.API.Controllers
         [HttpGet]
         public async Task<IEnumerable<InventoryReconciliationResult>> GetReconciliation()
         {
-            var inventoryService = new InventoryService();
-            var inventoryBalances = inventoryService.GetInventoryBalances();
-            var accountingBalances = inventoryService.GetAccountingBalances();
+            var inventoryBalances = _inventoryService.GetInventoryBalances();
+            var accountingBalances = _inventoryService.GetAccountingBalances();
             await Task.WhenAll(inventoryBalances, accountingBalances);
             
             if (inventoryBalances.Result == null)
