@@ -1,31 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Bargreen.Services.Models;
 
 namespace Bargreen.Services
 {
-    public class InventoryReconciliationResult
-    {
-        public string ItemNumber { get; set; }
-        public decimal TotalValueOnHandInInventory { get; set; }
-        public decimal TotalValueInAccountingBalance { get; set; }
-    }
-
-    public class InventoryBalance
-    {
-        public string ItemNumber { get; set; }
-        public string WarehouseLocation { get; set; }
-        public int QuantityOnHand { get; set; }
-        public decimal PricePerItem { get; set; }
-    }
-
-    public class AccountingBalance
-    {
-        public string ItemNumber { get; set; }
-        public decimal TotalInventoryValue { get; set; }
-    }
-
-
     public class InventoryService
     {
         public IEnumerable<InventoryBalance> GetInventoryBalances()
