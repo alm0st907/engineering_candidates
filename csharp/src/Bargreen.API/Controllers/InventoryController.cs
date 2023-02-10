@@ -25,16 +25,27 @@ namespace Bargreen.API.Controllers
         [HttpGet]
         public async Task<IEnumerable<InventoryBalance>> GetInventoryBalances()
         {
-            var inventoryService = new InventoryService();
-            return await inventoryService.GetInventoryBalances();
+            var result = await _inventoryService.GetInventoryBalances();
+            
+            if(result == null)
+            {
+                _logger.LogError("Inventory balances were null");
+            }
+
+            return result;
         }
 
         [Route("AccountingBalances")]
         [HttpGet]
         public async Task<IEnumerable<AccountingBalance>> GetAccountingBalances()
         {
-            var inventoryService = new InventoryService();
-            return await inventoryService.GetAccountingBalances();
+            var result = await _inventoryService.GetAccountingBalances();
+            
+            if (result == null)
+            {
+                _logger.LogError("Accounting balances were null");
+            }
+            return result;
         }
 
         [Route("InventoryReconciliation")]
@@ -44,7 +55,7 @@ namespace Bargreen.API.Controllers
             var inventoryService = new InventoryService();
             var inventoryBalances = inventoryService.GetInventoryBalances();
             var accountingBalances = inventoryService.GetAccountingBalances();
-            Task.WaitAll(inventoryBalances, accountingBalances);
+            await Task.WhenAll(inventoryBalances, accountingBalances);
             
             if (inventoryBalances.Result == null)
             {
