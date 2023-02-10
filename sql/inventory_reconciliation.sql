@@ -27,4 +27,6 @@ INSERT INTO @accounting VALUES ('xxccM', 7602.75)
 INSERT INTO @accounting VALUES ('fbr77', 17.99)
 
 --TODO-CHALLENGE: Write a query to reconcile matches/differences between the inventory and accounting tables
-SELECT * FROM ...
+select i.ItemNumber, SUM(i.QuantityOnHand) as item_inventory from @inventory i inner join @accounting a on UPPER(i.ItemNumber) = upper(a.ItemNumber)
+group by i.ItemNumber
+
