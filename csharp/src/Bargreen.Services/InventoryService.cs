@@ -90,8 +90,6 @@ namespace Bargreen.Services
         public async Task<IEnumerable<InventoryReconciliationResult>> ReconcileInventoryToAccounting(IEnumerable<InventoryBalance> inventoryBalances, IEnumerable<AccountingBalance> accountingBalances)
         {
             //convert inventory balances to accounting balances as a dictionary for quick checks
-
-
             var convertedInventoryBalance = new Dictionary<string, decimal>();
             
             foreach (var balance in inventoryBalances)

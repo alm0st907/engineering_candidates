@@ -20,6 +20,25 @@ namespace Bargreen.Tests
             var result = await controller.GetInventoryBalances();
             Assert.NotEmpty(result);
         }
+        
+        [Fact]
+        public async Task InventoryController_Can_Return_Accounting_Balances()
+        {
+            var inventoryService = new InventoryService();
+            var controller = new InventoryController(inventoryService, new NullLogger<InventoryController>());
+            var result = await controller.GetAccountingBalances();
+            Assert.NotEmpty(result);
+        }
+        
+        //test for reconciliation
+        [Fact]
+        public async Task InventoryController_Can_Return_Reconciliation_Results()
+        {
+            var inventoryService = new InventoryService();
+            var controller = new InventoryController(inventoryService, new NullLogger<InventoryController>());
+            var result = await controller.GetReconciliation();
+            Assert.NotEmpty(result);
+        }
 
         [Fact]
         public void Controller_Methods_Are_Async()
