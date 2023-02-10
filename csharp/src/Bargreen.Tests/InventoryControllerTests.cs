@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Bargreen.Services;
 using Xunit;
 
 namespace Bargreen.Tests
@@ -11,10 +12,11 @@ namespace Bargreen.Tests
     public class InventoryControllerTests
     {
         [Fact]
-        public void InventoryController_Can_Return_Inventory_Balances()
+        public async Task InventoryController_Can_Return_Inventory_Balances()
         {
-            var controller = new InventoryController();
-            var result = controller.GetInventoryBalances();
+            var inventoryService = new InventoryService();
+            var controller = new InventoryController(inventoryService);
+            var result = await controller.GetInventoryBalances();
             Assert.NotEmpty(result);
         }
 

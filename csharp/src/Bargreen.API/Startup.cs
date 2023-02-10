@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bargreen.Services;
+using Bargreen.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -26,7 +29,10 @@ namespace Bargreen.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddLogging();
+            services.AddMvc(options => options.EnableEndpointRouting = false);
+
+            services.AddSingleton<IInventoryService,InventoryService>();
 
             services.AddSwaggerGen(c =>
             {
@@ -53,8 +59,8 @@ namespace Bargreen.API
                 c.RoutePrefix = string.Empty;
             });
 
-            app.UseHttpsRedirection();
             app.UseMvc();
+            app.UseHttpsRedirection();
         }
     }
 }

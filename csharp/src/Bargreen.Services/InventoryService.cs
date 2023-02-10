@@ -1,14 +1,18 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
+using Bargreen.Services.Interfaces;
 using Bargreen.Services.Models;
 
 namespace Bargreen.Services
 {
-    public class InventoryService
+    public class InventoryService : IInventoryService
     {
-        public IEnumerable<InventoryBalance> GetInventoryBalances()
+        public async Task<IEnumerable<InventoryBalance>> GetInventoryBalances()
         {
+            //some sort of async db call would be here and awaited, then returned
             return new List<InventoryBalance>()
             {
                 new InventoryBalance()
@@ -56,8 +60,10 @@ namespace Bargreen.Services
             };
         }
 
-        public IEnumerable<AccountingBalance> GetAccountingBalances()
+        public async Task<IEnumerable<AccountingBalance>> GetAccountingBalances()
         {
+            
+            //some sort of async db call would be here and awaited, then returned
             return new List<AccountingBalance>()
             {
                 new AccountingBalance()
@@ -83,7 +89,7 @@ namespace Bargreen.Services
             };
         }
 
-        public static IEnumerable<InventoryReconciliationResult> ReconcileInventoryToAccounting(IEnumerable<InventoryBalance> inventoryBalances, IEnumerable<AccountingBalance> accountingBalances)
+        public async Task<IEnumerable<InventoryReconciliationResult>> ReconcileInventoryToAccounting(IEnumerable<InventoryBalance> inventoryBalances, IEnumerable<AccountingBalance> accountingBalances)
         {
             //TODO-CHALLENGE: Compare inventory balances to accounting balances and find differences
             throw new NotImplementedException();
