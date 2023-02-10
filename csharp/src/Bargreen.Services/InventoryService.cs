@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Bargreen.Services.Extensions;
 using Bargreen.Services.Interfaces;
 using Bargreen.Services.Models;
 
@@ -91,8 +89,42 @@ namespace Bargreen.Services
 
         public async Task<IEnumerable<InventoryReconciliationResult>> ReconcileInventoryToAccounting(IEnumerable<InventoryBalance> inventoryBalances, IEnumerable<AccountingBalance> accountingBalances)
         {
-            //TODO-CHALLENGE: Compare inventory balances to accounting balances and find differences
-            throw new NotImplementedException();
+            //convert inventory balances to accounting balances as a dictionary for quick checks
+
+
+            var convertedInventoryBalance = new Dictionary<string, decimal>();
+            
+            foreach (var balance in inventoryBalances)
+            {
+                var convertedBalance = balance.ConvertToAccountingBalance();
+                
+                //account for casing differences and normalize to uppercase
+                if (!convertedInventoryBalance.ContainsKey(balance.ItemNumber.ToUpperInvariant()))
+                {
+                    convertedInventoryBalance.Add(convertedBalance.ItemNumber.ToUpperInvariant(), convertedBalance.TotalInventoryValue);
+                }
+                else
+                {
+                    convertedInventoryBalance[convertedBalance.ItemNumber.ToUpperInvariant()] += convertedBalance.TotalInventoryValue;
+                }
+            }
+            
+            var results = new List<InventoryReconciliationResult>();
+            foreach(var balance in accountingBalances)
+            {
+                convertedInventoryBalance.TryGetValue(balance.ItemNumber.ToUpperInvariant(), out var inventoryValue);
+                if (inventoryValue != balance.TotalInventoryValue)
+                {
+                    results.Add(new InventoryReconciliationResult()
+                    {
+                        ItemNumber = balance.ItemNumber,
+                        TotalValueInAccountingBalance = balance.TotalInventoryValue,
+                        TotalValueOnHandInInventory = inventoryValue
+                    });
+                }
+            }
+            
+            return results;
         }
     }
 }

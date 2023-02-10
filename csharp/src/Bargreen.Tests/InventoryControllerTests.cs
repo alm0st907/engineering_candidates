@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Bargreen.Services;
+using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
 
 namespace Bargreen.Tests
@@ -15,7 +16,7 @@ namespace Bargreen.Tests
         public async Task InventoryController_Can_Return_Inventory_Balances()
         {
             var inventoryService = new InventoryService();
-            var controller = new InventoryController(inventoryService);
+            var controller = new InventoryController(inventoryService, new NullLogger<InventoryController>());
             var result = await controller.GetInventoryBalances();
             Assert.NotEmpty(result);
         }
