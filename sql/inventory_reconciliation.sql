@@ -6,7 +6,7 @@ declare @inventory table (
     PricePerItem decimal not null
 )
 
---Create a table to hold accounting balances: 
+--Create a table to hold accounting balances:
 declare @accounting table (
     ItemNumber varchar(50) not null,
     TotalInventoryValue decimal not null
@@ -27,6 +27,10 @@ INSERT INTO @accounting VALUES ('xxccM', 7602.75)
 INSERT INTO @accounting VALUES ('fbr77', 17.99)
 
 --TODO-CHALLENGE: Write a query to reconcile matches/differences between the inventory and accounting tables
-select i.ItemNumber, SUM(i.QuantityOnHand) as item_inventory from @inventory i inner join @accounting a on UPPER(i.ItemNumber) = upper(a.ItemNumber)
-group by i.ItemNumber
+select i.ItemNumber,
+       a.TotalInventoryValue                  as accounting_inventory_value,
+       SUM(i.QuantityOnHand * i.PricePerItem) as warehouse_inventory_value
+from @inventory i
+         left join @accounting a on UPPER(i.ItemNumber) = upper(a.ItemNumber)
+group by i.ItemNumber, a.TotalInventoryValue
 
